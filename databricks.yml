@@ -20,7 +20,7 @@ targets:
     workspace:
       host: https://adb-7405611909460935.15.azuredatabricks.net
     variables:
-      catalog: essentra_ws_test
+      catalog: essentra
       schema: ${workspace.current_user.short_name}
       job_status: PAUSED
 
@@ -30,7 +30,7 @@ targets:
       host: https://adb-7405611909460935.15.azuredatabricks.net
       root_path: /Workspace/Users/mikel.molinuevo@keepler.io/.bundle/${bundle.name}/${bundle.target}
     variables:
-      catalog: essentra_ws_test
+      catalog: essentra
       schema: prod
       job_status: PAUSED
     permissions:
