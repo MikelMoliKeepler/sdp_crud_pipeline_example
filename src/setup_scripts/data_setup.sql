@@ -1,5 +1,12 @@
 -- =============================================
--- 0. LIMPIEZA DE TABLAS
+-- 0. CREACIÓN DE ESQUEMAS (CAPAS)
+-- =============================================
+CREATE SCHEMA IF NOT EXISTS bronze;
+CREATE SCHEMA IF NOT EXISTS silver;
+CREATE SCHEMA IF NOT EXISTS gold;
+
+-- =============================================
+-- 1. LIMPIEZA DE TABLAS
 -- =============================================
 
 DROP TABLE IF EXISTS bronze.sales;
@@ -8,14 +15,6 @@ DROP TABLE IF EXISTS bronze.b_sales;
 DROP TABLE IF EXISTS bronze.b_users;
 DROP TABLE IF EXISTS silver.s_sales;
 DROP TABLE IF EXISTS silver.s_users;
-
-
--- =============================================
--- 1. CREACIÓN DE ESQUEMAS (CAPAS)
--- =============================================
-CREATE SCHEMA IF NOT EXISTS bronze;
-CREATE SCHEMA IF NOT EXISTS silver;
-CREATE SCHEMA IF NOT EXISTS gold;
 
 -- =============================================
 -- 2. CREACIÓN DE TABLAS EN BRONZE
