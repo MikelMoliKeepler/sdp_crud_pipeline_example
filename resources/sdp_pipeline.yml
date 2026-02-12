@@ -1,4 +1,18 @@
 resources:
+  jobs:
+    sdp_job_trigger:
+      name: "DLT test job"
+
+      schedule:
+        quartz_cron_expression: "0 0 12 * * ?"
+        timezone_id: "Europe/Madrid"
+        pause_status: ${var.job_status}
+
+      tasks:
+        - task_key: run_sdp_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.sdp_pipeline.id}
+
   pipelines:
     sdp_pipeline:
       name: sdp_pipeline
@@ -13,6 +27,4 @@ resources:
 
       environment:
         dependencies:
-          # We include every dependency defined by pyproject.toml by defining an editable environment
-          # that points to the folder where pyproject.toml is deployed.
           - --editable ${workspace.file_path}
