@@ -1,4 +1,4 @@
-CREATE STREAMING LIVE TABLE ${schema_bronze}.customer_bronze
+CREATE STREAMING LIVE TABLE bronze.customer_bronze
 (
   address string,
   email string,
@@ -10,7 +10,7 @@ CREATE STREAMING LIVE TABLE ${schema_bronze}.customer_bronze
   _rescued_data string 
 )
 SELECT * 
-FROM STREAM ${schema_bronze}.customers;
+FROM STREAM bronze.customers;
 
 CREATE TEMPORARY STREAMING LIVE TABLE tmp_customer_transformations(
   CONSTRAINT valid_id EXPECT (id IS NOT NULL) ON VIOLATION DROP ROW,
@@ -25,4 +25,4 @@ AS SELECT
   operation,
   operation_date,
   _rescued_data
-FROM STREAM(LIVE.${schema_bronze}.customer_bronze);
+FROM STREAM(LIVE.bronze.customer_bronze);
