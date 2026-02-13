@@ -1,4 +1,4 @@
-CREATE STREAMING LIVE TABLE customer_bronze
+CREATE STREAMING LIVE TABLE ${schema_bronze}.customer_bronze
 (
   address string,
   email string,
@@ -10,15 +10,13 @@ CREATE STREAMING LIVE TABLE customer_bronze
   _rescued_data string 
 )
 SELECT * 
-FROM STREAM bronze.customers;
+FROM STREAM ${schema_bronze}.customers;
 
 CREATE TEMPORARY STREAMING LIVE TABLE tmp_customer_transformations(
   CONSTRAINT valid_id EXPECT (id IS NOT NULL) ON VIOLATION DROP ROW,
   CONSTRAINT valid_address EXPECT (address IS NOT NULL),
   CONSTRAINT valid_operation EXPECT (operation IS NOT NULL) ON VIOLATION DROP ROW
 )
-TBLPROPERTIES ("quality" = "silver")
-COMMENT "Cleansed bronze customer view (i.e. what will become Silver)"
 AS SELECT 
   lower(address) as address,
   email,
@@ -27,4 +25,4 @@ AS SELECT
   operation,
   operation_date,
   _rescued_data
-FROM STREAM(LIVE.customer_bronze);
+FROM STREAM(LIVE.${schema_bronze}.customer_bronze);
