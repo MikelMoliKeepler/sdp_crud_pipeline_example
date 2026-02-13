@@ -1,3 +1,4 @@
+-- TODO: Check if there is a way to parametrize the schema when creating streaming live tables. ${var_name}.table_name is not supported
 CREATE STREAMING LIVE TABLE bronze.customer_bronze
 (
   address string,
