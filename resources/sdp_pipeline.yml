@@ -16,8 +16,11 @@ resources:
   pipelines:
     sdp_pipeline:
       name: sdp_pipeline
-      catalog: ${var.catalog}
-      schema: ${var.schema}
+      configuration:
+        catalog: ${var.finance.catalog}
+        schema_bronze: bronze
+        schema_silver: silver
+        schema_gold: gold
       serverless: true
       root_path: "../src"
 

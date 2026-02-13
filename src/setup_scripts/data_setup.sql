@@ -1,27 +1,28 @@
 -- =============================================
--- 0. CREACIÓN DE ESQUEMAS (CAPAS)
--- =============================================
-CREATE SCHEMA IF NOT EXISTS essentra.bronze;
-CREATE SCHEMA IF NOT EXISTS essentra.silver;
-CREATE SCHEMA IF NOT EXISTS essentra.gold;
-
--- =============================================
--- 1. LIMPIEZA DE TABLAS
+-- 0. DROP EXISTING TABLES
 -- =============================================
 
-DROP TABLE IF EXISTS essentra.bronze.sales;
-DROP TABLE IF EXISTS essentra.bronze.users;
-DROP TABLE IF EXISTS essentra.bronze.b_sales;
-DROP TABLE IF EXISTS essentra.bronze.b_users;
-DROP TABLE IF EXISTS essentra.silver.s_sales;
-DROP TABLE IF EXISTS essentra.silver.s_users;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_bronze}}.sales;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_bronze}}.users;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_bronze}}.b_sales;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_bronze}}.b_users;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_silver}}.s_sales;
+DROP TABLE IF EXISTS ${catalog}.${schema_${catalog}.${schema_silver}}.s_users;
+
 
 -- =============================================
--- 2. CREACIÓN DE TABLAS EN BRONZE
+-- 1. SCHEMA CREATION
+-- =============================================
+CREATE SCHEMA IF NOT EXISTS ${catalog}.${schema_bronze};
+CREATE SCHEMA IF NOT EXISTS ${catalog}.${schema_silver};
+CREATE SCHEMA IF NOT EXISTS ${catalog}.${schema_gold};
+
+-- =============================================
+-- 2. TABLE CREATION
 -- =============================================
 
 -- Tabla de Clientes
-CREATE TABLE IF NOT EXISTS essentra.bronze.customers (
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema_bronze}.customers (
   address string,
   email string,
   id string,
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS essentra.bronze.customers (
 TBLPROPERTIES (delta.enableChangeDataFeed = true);
 
 -- Tabla de Usuarios
-CREATE TABLE IF NOT EXISTS essentra.bronze.users (
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema_bronze}.users (
     user_id INT,
     user_name STRING,
     email STRING,
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS essentra.bronze.users (
 TBLPROPERTIES (delta.enableChangeDataFeed = true);
 
 -- Tabla de Ventas
-CREATE TABLE IF NOT EXISTS essentra.bronze.sales (
+CREATE TABLE IF NOT EXISTS ${catalog}.${schema_bronze}.sales (
     sale_id STRING,
     user_id INT,
     amount DOUBLE,
@@ -55,11 +56,10 @@ CREATE TABLE IF NOT EXISTS essentra.bronze.sales (
 TBLPROPERTIES (delta.enableChangeDataFeed = true);
 
 -- =============================================
--- 3. INSERCIÓN DE DATOS DE PRUEBA
+-- 3. DATA INSERTION
 -- =============================================
  
- -- Insertar datos en b_customers
- INSERT INTO essentra.bronze.customers VALUES 
+ INSERT INTO ${catalog}.${schema_bronze}.customers VALUES 
  ( 'Sitio 1', 'paco@gmail.com', '0', 'Paco', 'Paquito', 'insert', '2024-01-01', ''),
  ( 'Sitio 2', 'ana@gmail.com', '1', 'Ana', 'Garcia', 'insert', '2024-01-01', ''),
  ( 'Sitio 3', 'luis@gmail.com', '2', 'Luis', 'Perez', 'insert', '2024-01-01', ''),
@@ -69,16 +69,14 @@ TBLPROPERTIES (delta.enableChangeDataFeed = true);
  ;
 
 
--- Insertar datos en b_users
-INSERT INTO essentra.bronze.users VALUES 
+INSERT INTO ${catalog}.${schema_bronze}.users VALUES 
 (1, 'Ana Garcia', 'ana.g@example.com', '2024-01-10', current_timestamp()),
 (2, 'Luis Perez', 'luis.p@example.com', '2024-01-12', current_timestamp()),
 (3, 'Maria Lopez', 'm.lopez@example.com', '2024-01-15', current_timestamp()),
 (4, 'Carlos Ruiz', 'cruiz@example.com', '2024-02-01', current_timestamp()),
 (5, 'Juan Cuesta', 'p.paquito@example.com', '2024-02-01', current_timestamp());
 
--- Insertar datos en b_sales
-INSERT INTO essentra.bronze.sales VALUES 
+INSERT INTO ${catalog}.${schema_bronze}.sales VALUES 
 ('S001', 1, 150.50, 'PROD_A', '2024-02-05', current_timestamp()),
 ('S002', 2, 89.99, 'PROD_B', '2024-02-06', current_timestamp()),
 ('S003', 1, 45.00, 'PROD_C', '2024-02-07', current_timestamp()),
@@ -88,7 +86,7 @@ INSERT INTO essentra.bronze.sales VALUES
 ('S007', 5, 100.28, 'PROD_F', '2024-02-09', current_timestamp());
 
 -- =============================================
--- 4. VERIFICACIÓN
+-- 4. VERIFY CREATION IS OK
 -- =============================================
-SELECT * FROM essentra.bronze.users;
-SELECT * FROM essentra.bronze.sales;
+SELECT * FROM ${catalog}.${schema_bronze}.users;
+SELECT * FROM ${catalog}.${schema_bronze}.sales;

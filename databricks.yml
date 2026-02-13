@@ -1,4 +1,3 @@
-# TODO: Change static info for parameters
 bundle:
   name: sdp-pipeline-example
 
@@ -6,10 +5,20 @@ include:
   - resources/*.yml
 
 variables:
-  catalog:
-    description: The catalog to use
-  schema:
-    description: The schema to use
+  finance:
+    type: complex
+    description: Parameters used in finance related pipelines
+    default:
+      catalog: cat_finance_dev
+  
+  schemas:
+    type: complex
+    description: Name of the schemas that will be used in the pipelines
+    default:
+      bronze: bronze
+      silver: silver
+      gold: gold
+  
   job_status:
     description: Schedule of the workflow (PAUSED / UNPAUSED)
 
@@ -19,20 +28,32 @@ targets:
     default: true
     workspace:
       host: https://adb-7405611909460935.15.azuredatabricks.net
+    
     variables:
-      catalog: essentra
-      schema: ${workspace.current_user.short_name}
+      finance: 
+        catalog: essentra # TODO: Create the catalog as cat_finance_pro
       job_status: PAUSED
 
+    permissions:
+      # TODO: Check how to include this as a group an not nominally.
+      - user_name: mikel.molinuevo@keepler.io
+        level: CAN_MANAGE
+      - user_name: ignacio.martinez@keepler.io
+        level: CAN_MANAGE
   prod:
     mode: production
     workspace:
       host: https://adb-7405611909460935.15.azuredatabricks.net
       root_path: /Workspace/Users/mikel.molinuevo@keepler.io/.bundle/${bundle.name}/${bundle.target}
+    
     variables:
-      catalog: essentra
-      schema: prod
+      finance: 
+        catalog: essentra # TODO: Create the catalog as cat_finance_pro
       job_status: PAUSED
+
     permissions:
+      # TODO: Check how to include this as a group an not nominally.
       - user_name: mikel.molinuevo@keepler.io
+        level: CAN_MANAGE
+      - user_name: ignacio.martinez@keepler.io
         level: CAN_MANAGE
